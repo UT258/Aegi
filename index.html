@@ -4,8 +4,517 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AEGIS - Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+/* AEGIS Dashboard - Complete Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #1a472a;
+    --secondary-color: #2ecc71;
+    --accent-color: #e74c3c;
+    --warning-color: #f39c12;
+    --success-color: #27ae60;
+    --dark-bg: #0f1419;
+    --card-bg: #1e2936;
+    --border-color: #2d3e50;
+    --text-primary: #ecf0f1;
+    --text-secondary: #bdc3c7;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--dark-bg) 0%, #1a2332 100%);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ===== HEADER ===== */
+.navbar {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0a331b 100%);
+    border-bottom: 2px solid var(--secondary-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.navbar-brand h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.navbar-brand p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 30px;
+}
+
+.navbar-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.navbar-links a:hover {
+    color: var(--secondary-color);
+    background: rgba(46, 204, 113, 0.1);
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+    background: linear-gradient(135deg, rgba(26, 71, 42, 0.8) 0%, rgba(10, 51, 27, 0.8) 100%);
+    padding: 80px 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.hero h2 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.hero p {
+    font-size: 18px;
+    color: var(--text-secondary);
+}
+
+/* ===== SECTIONS ===== */
+.section {
+    padding: 60px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.section h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 50px;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===== STATUS SECTION ===== */
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.status-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.status-header {
+    background: linear-gradient(135deg, var(--primary-color), #0a331b);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.status-header h3 {
+    color: var(--secondary-color);
+    margin: 0;
+    font-size: 18px;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-badge.online {
+    background: rgba(46, 204, 113, 0.3);
+    color: var(--secondary-color);
+}
+
+.status-badge.excellent {
+    background: rgba(46, 204, 113, 0.3);
+    color: var(--secondary-color);
+}
+
+.status-content {
+    padding: 25px;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-item label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.status-item span {
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.battery-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-left: 10px;
+    min-width: 100px;
+}
+
+.battery-level {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary-color), #27ae60);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--dark-bg);
+    font-weight: 700;
+}
+
+/* ===== SENSOR DATA ===== */
+.sensors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.sensor-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.sensor-card h4 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.sensor-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: #3498db;
+    margin: 15px 0;
+}
+
+.sensor-card canvas {
+    width: 100%;
+    max-height: 200px;
+    margin-top: 20px;
+}
+
+/* ===== ALERT SECTION ===== */
+.alert-history {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.alert-item {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 6px;
+    border-left: 4px solid var(--secondary-color);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    align-items: center;
+}
+
+.alert-item.info {
+    border-left-color: var(--secondary-color);
+    background: rgba(46, 204, 113, 0.05);
+}
+
+.alert-item.warning {
+    border-left-color: var(--warning-color);
+    background: rgba(243, 156, 18, 0.05);
+}
+
+.alert-item.success {
+    border-left-color: var(--success-color);
+    background: rgba(39, 174, 96, 0.05);
+}
+
+.alert-time {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.alert-type {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.alert-location {
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-align: right;
+}
+
+/* ===== QUICK CONTROLS ===== */
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.control-btn {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 30px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.control-btn:hover {
+    border-color: var(--secondary-color);
+    background: rgba(46, 204, 113, 0.1);
+    transform: translateY(-5px);
+}
+
+.control-icon {
+    font-size: 32px;
+}
+
+/* ===== ADVANCED FEATURES ===== */
+.advanced-features {
+    background: linear-gradient(135deg, rgba(26, 71, 42, 0.3) 0%, rgba(46, 204, 113, 0.1) 100%);
+    border-top: 2px solid var(--secondary-color);
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.advanced-btn {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #27ae60 100%);
+    border: 2px solid var(--secondary-color);
+    transition: all 0.3s ease;
+}
+
+.advanced-btn:hover {
+    background: linear-gradient(135deg, #27ae60 0%, var(--secondary-color) 100%);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+    transform: translateY(-3px);
+}
+
+.advanced-info {
+    margin-top: 30px;
+    padding: 15px 20px;
+    background: rgba(46, 204, 113, 0.1);
+    border-left: 4px solid var(--secondary-color);
+    border-radius: 4px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: linear-gradient(135deg, var(--primary-color), #0a331b);
+    border-top: 2px solid var(--secondary-color);
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.footer p {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.footer p:first-child {
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+.status-card,
+.sensor-card,
+.control-btn,
+.alert-item {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .navbar .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .navbar-links {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero h2 {
+        font-size: 28px;
+    }
+
+    .section h2 {
+        font-size: 24px;
+        margin-bottom: 40px;
+    }
+
+    .alert-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sensors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .controls-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-brand h1 {
+        font-size: 20px;
+    }
+
+    .hero {
+        padding: 60px 20px;
+    }
+
+    .hero h2 {
+        font-size: 22px;
+    }
+
+    .section h2 {
+        font-size: 20px;
+    }
+
+    .controls-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .status-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #27ae60;
+}
+    </style>
 </head>
 <body>
     <!-- Navigation Header -->
@@ -243,6 +752,384 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+// AEGIS Dashboard - JavaScript with Advanced Features
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCharts();
+    startRealTimeUpdates();
+    addAnimationStyles();
+});
+
+// ===== CHART INITIALIZATION =====
+function initializeCharts() {
+    // Temperature Chart
+    const tempCtx = document.getElementById('tempChart');
+    if (tempCtx) {
+        new Chart(tempCtx, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                datasets: [{
+                    label: 'Temperature (°C)',
+                    data: [22, 24, 26, 28.5, 27, 25],
+                    borderColor: '#e74c3c',
+                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: false, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    // Humidity Chart
+    const humidityCtx = document.getElementById('humidityChart');
+    if (humidityCtx) {
+        new Chart(humidityCtx, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                datasets: [{
+                    label: 'Humidity (%)',
+                    data: [55, 60, 65, 65, 62, 58],
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: false, max: 100, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    // Gas Level Chart
+    const gasCtx = document.getElementById('gasChart');
+    if (gasCtx) {
+        new Chart(gasCtx, {
+            type: 'bar',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                datasets: [{
+                    label: 'Gas Level (ppm)',
+                    data: [10, 15, 8, 12, 18, 11],
+                    backgroundColor: ['#2ecc71', '#2ecc71', '#2ecc71', '#2ecc71', '#f39c12', '#2ecc71'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    // Metal Detection Chart
+    const metalCtx = document.getElementById('metalChart');
+    if (metalCtx) {
+        new Chart(metalCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['No Detection', 'Detection'],
+                datasets: [{
+                    data: [95, 5],
+                    backgroundColor: ['#2ecc71', '#e74c3c'],
+                    borderColor: '#1e2936',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#bdc3c7', padding: 15 }
+                    }
+                }
+            }
+        });
+    }
+}
+
+// ===== REAL-TIME UPDATES =====
+function startRealTimeUpdates() {
+    setInterval(updateSensorData, 5000);
+}
+
+function updateSensorData() {
+    // Temperature
+    const tempValue = document.getElementById('temp-value');
+    const currentTemp = parseFloat(tempValue.textContent);
+    const newTemp = (currentTemp + (Math.random() - 0.5) * 0.5).toFixed(1);
+    tempValue.textContent = newTemp + '°C';
+
+    // Humidity
+    const humidityValue = document.getElementById('humidity-value');
+    const currentHumidity = parseInt(humidityValue.textContent);
+    const newHumidity = Math.max(30, Math.min(90, currentHumidity + Math.random() * 4 - 2));
+    humidityValue.textContent = Math.round(newHumidity) + '%';
+
+    // Gas Level
+    const gasValue = document.getElementById('gas-value');
+    const gasLevel = Math.random() * 25;
+    gasValue.textContent = gasLevel < 20 ? 'Safe' : 'Warning';
+    gasValue.style.color = gasLevel < 20 ? '#2ecc71' : '#f39c12';
+}
+
+// ===== ACTION HANDLERS =====
+function requestPhoto() {
+    showNotification('📸 Photo request sent...', 'info');
+    setTimeout(() => {
+        showNotification('✅ Photo captured!', 'success');
+    }, 1500);
+}
+
+function testBuzzer() {
+    showNotification('🔔 Testing buzzer...', 'info');
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.5);
+    setTimeout(() => {
+        showNotification('✅ Buzzer test completed!', 'success');
+    }, 500);
+}
+
+function startMonitoring() {
+    showNotification('▶️ Monitoring started...', 'info');
+    setTimeout(() => {
+        showNotification('✅ All sensors active!', 'success');
+    }, 1000);
+}
+
+function stopMonitoring() {
+    showNotification('⏹️ Monitoring stopped...', 'warning');
+    setTimeout(() => {
+        showNotification('✅ Data saved!', 'success');
+    }, 1000);
+}
+
+// ===== ADVANCED FEATURES =====
+function systemTest() {
+    showNotification('⚙️ Running comprehensive system test...', 'info');
+    let testProgress = 0;
+    const testInterval = setInterval(() => {
+        testProgress += 25;
+        if (testProgress >= 100) {
+            clearInterval(testInterval);
+            showNotification('✅ System test completed! All components operational.', 'success');
+        }
+    }, 500);
+}
+
+function downloadReport() {
+    showNotification('📥 Generating report...', 'info');
+    setTimeout(() => {
+        const report = generateDummyReport();
+        downloadFile(report, 'AEGIS_Report_' + new Date().toISOString().slice(0, 10) + '.txt');
+        showNotification('✅ Report downloaded successfully!', 'success');
+    }, 1500);
+}
+
+function exportLogs() {
+    showNotification('📤 Exporting system logs...', 'info');
+    setTimeout(() => {
+        const logs = generateDummyLogs();
+        downloadFile(logs, 'AEGIS_Logs_' + new Date().toISOString().slice(0, 10) + '.log');
+        showNotification('✅ Logs exported successfully!', 'success');
+    }, 1000);
+}
+
+function clearAlerts() {
+    const alertHistory = document.querySelector('.alert-history');
+    if (alertHistory) {
+        alertHistory.innerHTML = '<p style="text-align: center; color: #bdc3c7; padding: 20px;">No alerts at this time.</p>';
+        showNotification('✅ Alert history cleared!', 'success');
+    }
+}
+
+// ===== DATA GENERATORS =====
+function generateDummyReport() {
+    const date = new Date().toISOString();
+    return `
+AEGIS SYSTEM REPORT
+Generated: ${date}
+
+=== SYSTEM STATUS ===
+Overall Status: OPERATIONAL
+Helmet Module: ONLINE
+Footwear Module: ONLINE
+Detection Accuracy: 95%
+Response Time: < 3 seconds
+
+=== SENSOR DATA ===
+Temperature: 28.5°C
+Humidity: 65%
+Gas Level: Safe
+Metal Detection: No Active Detection
+
+=== ALERTS TODAY ===
+- 14:32:15 - METAL DETECTED (Acknowledged)
+- 13:45:22 - GAS LEVEL ELEVATED (Acknowledged)
+- 13:20:10 - PHOTO CAPTURED (Completed)
+
+=== PERFORMANCE METRICS ===
+Detection Depth: 15cm (Metal)
+Detection Radius: 25-30cm (Gas)
+Battery Life: 8+ hours
+Network Success Rate: 98% (Mesh), 92% (GSM)
+
+=== NOTES ===
+System operating within normal parameters.
+All sensors calibrated and responsive.
+Recommended maintenance: None at this time.
+
+Report End
+    `;
+}
+
+function generateDummyLogs() {
+    const logs = [];
+    const now = new Date();
+    
+    for (let i = 0; i < 20; i++) {
+        const time = new Date(now.getTime() - i * 5 * 60000);
+        const events = [
+            'Sensor data updated',
+            'System check completed',
+            'Data transmitted to server',
+            'Battery status: 75%',
+            'Network status: Connected'
+        ];
+        logs.push(`[${time.toISOString()}] ${events[Math.floor(Math.random() * events.length)]}`);
+    }
+    
+    return logs.join('\n');
+}
+
+function downloadFile(content, filename) {
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+
+// ===== NOTIFICATION SYSTEM =====
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#2ecc71' : type === 'warning' ? '#f39c12' : '#3498db'};
+        color: white;
+        padding: 16px 24px;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        font-weight: 500;
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// ===== CSS ANIMATIONS =====
+function addAnimationStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', function(event) {
+    // Ctrl+P to request photo
+    if (event.ctrlKey && event.key === 'p') {
+        event.preventDefault();
+        requestPhoto();
+    }
+    // Ctrl+T to test buzzer
+    if (event.ctrlKey && event.key === 't') {
+        event.preventDefault();
+        testBuzzer();
+    }
+    // Ctrl+S to system test
+    if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        systemTest();
+    }
+    // Ctrl+L to export logs
+    if (event.ctrlKey && event.key === 'l') {
+        event.preventDefault();
+        exportLogs();
+    }
+});
+
+console.log('AEGIS Dashboard with Advanced Features initialized!');
+    </script>
 </body>
 </html>
