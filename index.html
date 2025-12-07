@@ -15,16 +15,19 @@
 }
 
 :root {
-    --primary-color: #1a472a;
-    --secondary-color: #2ecc71;
-    --accent-color: #e74c3c;
-    --warning-color: #f39c12;
-    --success-color: #27ae60;
-    --dark-bg: #0f1419;
-    --card-bg: #1e2936;
-    --border-color: #2d3e50;
-    --text-primary: #ecf0f1;
-    --text-secondary: #bdc3c7;
+    --primary-color: #0a2e5c;
+    --secondary-color: #00d4ff;
+    --accent-color: #ff6b6b;
+    --warning-color: #ffd93d;
+    --success-color: #6bcf7f;
+    --dark-bg: #05070e;
+    --card-bg: #0f1627;
+    --border-color: #1a2f4f;
+    --text-primary: #e8f0ff;
+    --text-secondary: #a8c5e8;
+    --cyan: #00d4ff;
+    --deep-blue: #0a2e5c;
+    --light-cyan: #4dd9ff;
 }
 
 html {
@@ -33,9 +36,23 @@ html {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, var(--dark-bg) 0%, #1a2332 100%);
+    background: linear-gradient(135deg, var(--dark-bg) 0%, #0d1a30 100%);
     color: var(--text-primary);
     line-height: 1.6;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(10, 46, 92, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
 }
 
 .container {
@@ -46,12 +63,13 @@ body {
 
 /* ===== HEADER ===== */
 .navbar {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #0a331b 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, #051a3d 100%);
     border-bottom: 2px solid var(--secondary-color);
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
+    box-shadow: 0 4px 25px rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(10px);
 }
 
 .navbar .container {
@@ -65,6 +83,8 @@ body {
     font-size: 28px;
     font-weight: 700;
     color: var(--secondary-color);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    letter-spacing: 2px;
 }
 
 .navbar-brand p {
@@ -89,26 +109,51 @@ body {
 
 .navbar-links a:hover {
     color: var(--secondary-color);
-    background: rgba(46, 204, 113, 0.1);
+    background: rgba(0, 212, 255, 0.1);
+    text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
 }
 
 /* ===== HERO SECTION ===== */
 .hero {
-    background: linear-gradient(135deg, rgba(26, 71, 42, 0.8) 0%, rgba(10, 51, 27, 0.8) 100%);
+    background: linear-gradient(135deg, rgba(10, 46, 92, 0.6) 0%, rgba(5, 7, 14, 0.8) 100%);
     padding: 80px 20px;
     text-align: center;
     border-bottom: 2px solid var(--secondary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.1) 50%, transparent 100%);
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 .hero h2 {
     font-size: 42px;
     margin-bottom: 15px;
     color: var(--secondary-color);
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    position: relative;
+    z-index: 1;
 }
 
 .hero p {
     font-size: 18px;
     color: var(--text-secondary);
+    position: relative;
+    z-index: 1;
 }
 
 /* ===== SECTIONS ===== */
@@ -138,16 +183,35 @@ body {
     border-radius: 8px;
     border: 1px solid var(--border-color);
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 212, 255, 0.15);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.status-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+    animation: cardGlow 2s infinite;
+}
+
+@keyframes cardGlow {
+    0% { left: -100%; }
+    100% { left: 100%; }
 }
 
 .status-header {
-    background: linear-gradient(135deg, var(--primary-color), #0a331b);
+    background: linear-gradient(135deg, var(--primary-color), #051a3d);
     padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid var(--secondary-color);
+    position: relative;
 }
 
 .status-header h3 {
@@ -165,13 +229,22 @@ body {
 }
 
 .status-badge.online {
-    background: rgba(46, 204, 113, 0.3);
+    background: rgba(0, 212, 255, 0.2);
     color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+    animation: pulse 2s infinite;
 }
 
 .status-badge.excellent {
-    background: rgba(46, 204, 113, 0.3);
-    color: var(--secondary-color);
+    background: rgba(107, 207, 127, 0.2);
+    color: var(--success-color);
+    box-shadow: 0 0 10px rgba(107, 207, 127, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.4); }
+    50% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.8); }
 }
 
 .status-content {
@@ -234,7 +307,15 @@ body {
     padding: 30px;
     border-radius: 8px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 25px rgba(0, 212, 255, 0.15);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.sensor-card:hover {
+    border-color: var(--secondary-color);
+    box-shadow: 0 4px 35px rgba(0, 212, 255, 0.25);
+    transform: translateY(-2px);
 }
 
 .sensor-card h4 {
@@ -246,8 +327,15 @@ body {
 .sensor-value {
     font-size: 36px;
     font-weight: 700;
-    color: #3498db;
+    color: var(--secondary-color);
     margin: 15px 0;
+    text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+    animation: dataFlip 0.6s ease;
+}
+
+@keyframes dataFlip {
+    0% { opacity: 0.6; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 .sensor-card canvas {
@@ -272,21 +360,39 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
     gap: 15px;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.alert-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--secondary-color), transparent);
+    animation: flowDown 2s infinite;
+}
+
+@keyframes flowDown {
+    0% { top: -100%; }
+    100% { top: 100%; }
 }
 
 .alert-item.info {
     border-left-color: var(--secondary-color);
-    background: rgba(46, 204, 113, 0.05);
+    background: rgba(0, 212, 255, 0.05);
 }
 
 .alert-item.warning {
     border-left-color: var(--warning-color);
-    background: rgba(243, 156, 18, 0.05);
+    background: rgba(255, 217, 61, 0.05);
 }
 
 .alert-item.success {
     border-left-color: var(--success-color);
-    background: rgba(39, 174, 96, 0.05);
+    background: rgba(107, 207, 127, 0.05);
 }
 
 .alert-time {
@@ -326,12 +432,30 @@ body {
     align-items: center;
     gap: 10px;
     font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+.control-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+    transition: 0.5s;
 }
 
 .control-btn:hover {
     border-color: var(--secondary-color);
-    background: rgba(46, 204, 113, 0.1);
+    background: rgba(0, 212, 255, 0.1);
     transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.2);
+}
+
+.control-btn:hover::before {
+    left: 100%;
 }
 
 .control-icon {
@@ -346,35 +470,39 @@ body {
 }
 
 .advanced-btn {
-    background: linear-gradient(135deg, var(--secondary-color) 0%, #27ae60 100%);
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--light-cyan) 100%);
     border: 2px solid var(--secondary-color);
     transition: all 0.3s ease;
+    color: var(--deep-blue) !important;
+    font-weight: 700;
 }
 
 .advanced-btn:hover {
-    background: linear-gradient(135deg, #27ae60 0%, var(--secondary-color) 100%);
-    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+    background: linear-gradient(135deg, var(--light-cyan) 0%, var(--secondary-color) 100%);
+    box-shadow: 0 6px 30px rgba(0, 212, 255, 0.5);
     transform: translateY(-3px);
 }
 
 .advanced-info {
     margin-top: 30px;
     padding: 15px 20px;
-    background: rgba(46, 204, 113, 0.1);
+    background: rgba(0, 212, 255, 0.1);
     border-left: 4px solid var(--secondary-color);
     border-radius: 4px;
     text-align: center;
     color: var(--text-secondary);
     font-size: 14px;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
 }
 
 /* ===== FOOTER ===== */
 .footer {
-    background: linear-gradient(135deg, var(--primary-color), #0a331b);
+    background: linear-gradient(135deg, var(--primary-color), #051a3d);
     border-top: 2px solid var(--secondary-color);
     padding: 40px 20px;
     text-align: center;
     color: var(--text-secondary);
+    box-shadow: 0 -4px 25px rgba(0, 212, 255, 0.1);
 }
 
 .footer p {
@@ -509,10 +637,12 @@ body {
 ::-webkit-scrollbar-thumb {
     background: var(--secondary-color);
     border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #27ae60;
+    background: var(--light-cyan);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
 }
     </style>
 </head>
@@ -753,14 +883,70 @@ body {
     </footer>
 
     <script>
-// AEGIS Dashboard - JavaScript with Advanced Features
+// AEGIS Dashboard - JavaScript with Advanced Features & Mock Data Simulation
+
+// ===== MOCK DATA =====
+const mockData = {
+    devices: {
+        helmet: {
+            deviceId: 'ESP32-CAM-001',
+            connection: { signal: 92, type: 'Wi-Fi' },
+            battery: 75,
+            status: 'Operational',
+            lastUpdate: new Date()
+        },
+        footwear: {
+            deviceId: 'ESP8266-FOOT-002',
+            connection: { signal: 88, type: 'Wi-Fi' },
+            battery: 68,
+            status: 'Operational',
+            lastUpdate: new Date()
+        }
+    },
+    sensors: {
+        temperature: 28.5,
+        humidity: 65,
+        gasLevel: 12,
+        metalDetection: false
+    },
+    systemHealth: {
+        status: 'HEALTHY',
+        detectionRate: 95,
+        responseTime: 2.8,
+        uptime: 100
+    },
+    alerts: [
+        { time: '14:32:15', type: 'METAL DETECTED', location: 'Footwear Module', class: 'info', icon: '⚠️' },
+        { time: '13:45:22', type: 'GAS LEVEL ELEVATED', location: 'Helmet Module', class: 'warning', icon: '⚡' },
+        { time: '13:20:10', type: 'PHOTO CAPTURED', location: 'ESP32-CAM', class: 'info', icon: '📸' },
+        { time: '12:00:00', type: 'SYSTEM INITIALIZED', location: 'All Modules', class: 'success', icon: '✅' }
+    ]
+};
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     initializeCharts();
     startRealTimeUpdates();
     addAnimationStyles();
+    updateMockDeviceStatus();
 });
+
+// ===== UPDATE MOCK DEVICE STATUS =====
+function updateMockDeviceStatus() {
+    // Update Helmet Module
+    const helmetBattery = document.querySelector('.status-card:nth-child(1) .battery-level');
+    if (helmetBattery) {
+        helmetBattery.style.width = mockData.devices.helmet.battery + '%';
+        helmetBattery.textContent = mockData.devices.helmet.battery + '%';
+    }
+
+    // Update Footwear Module
+    const footwearBattery = document.querySelector('.status-card:nth-child(2) .battery-level');
+    if (footwearBattery) {
+        footwearBattery.style.width = mockData.devices.footwear.battery + '%';
+        footwearBattery.textContent = mockData.devices.footwear.battery + '%';
+    }
+}
 
 // ===== CHART INITIALIZATION =====
 function initializeCharts() {
@@ -803,8 +989,8 @@ function initializeCharts() {
                 datasets: [{
                     label: 'Humidity (%)',
                     data: [55, 60, 65, 65, 62, 58],
-                    borderColor: '#3498db',
-                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    borderColor: '#00d4ff',
+                    backgroundColor: 'rgba(0, 212, 255, 0.1)',
                     borderWidth: 2,
                     tension: 0.4,
                     fill: true
@@ -832,7 +1018,7 @@ function initializeCharts() {
                 datasets: [{
                     label: 'Gas Level (ppm)',
                     data: [10, 15, 8, 12, 18, 11],
-                    backgroundColor: ['#2ecc71', '#2ecc71', '#2ecc71', '#2ecc71', '#f39c12', '#2ecc71'],
+                    backgroundColor: ['#6bcf7f', '#6bcf7f', '#6bcf7f', '#6bcf7f', '#ffd93d', '#6bcf7f'],
                     borderRadius: 4
                 }]
             },
@@ -857,8 +1043,8 @@ function initializeCharts() {
                 labels: ['No Detection', 'Detection'],
                 datasets: [{
                     data: [95, 5],
-                    backgroundColor: ['#2ecc71', '#e74c3c'],
-                    borderColor: '#1e2936',
+                    backgroundColor: ['#6bcf7f', '#ff6b6b'],
+                    borderColor: '#0f1627',
                     borderWidth: 3
                 }]
             },
@@ -868,7 +1054,7 @@ function initializeCharts() {
                 plugins: {
                     legend: {
                         position: 'bottom',
-                        labels: { color: '#bdc3c7', padding: 15 }
+                        labels: { color: '#a8c5e8', padding: 15 }
                     }
                 }
             }
@@ -876,36 +1062,107 @@ function initializeCharts() {
     }
 }
 
-// ===== REAL-TIME UPDATES =====
+// ===== REAL-TIME UPDATES WITH MOCK DATA =====
 function startRealTimeUpdates() {
-    setInterval(updateSensorData, 5000);
+    // Update sensor data more frequently for real-time feel
+    setInterval(updateSensorData, 2500);
+    setInterval(simulateBatteryDrain, 30000);
+    setInterval(simulateRandomAlerts, 45000);
+    addStreamingIndicator();
 }
 
 function updateSensorData() {
-    // Temperature
+    // Simulate temperature variation
+    mockData.sensors.temperature = parseFloat((mockData.sensors.temperature + (Math.random() - 0.5) * 2).toFixed(1));
+    mockData.sensors.temperature = Math.max(20, Math.min(35, mockData.sensors.temperature));
+    
     const tempValue = document.getElementById('temp-value');
-    const currentTemp = parseFloat(tempValue.textContent);
-    const newTemp = (currentTemp + (Math.random() - 0.5) * 0.5).toFixed(1);
-    tempValue.textContent = newTemp + '°C';
+    tempValue.textContent = mockData.sensors.temperature + '°C';
 
-    // Humidity
+    // Simulate humidity variation
+    mockData.sensors.humidity = Math.max(30, Math.min(90, mockData.sensors.humidity + Math.random() * 4 - 2));
+    
     const humidityValue = document.getElementById('humidity-value');
-    const currentHumidity = parseInt(humidityValue.textContent);
-    const newHumidity = Math.max(30, Math.min(90, currentHumidity + Math.random() * 4 - 2));
-    humidityValue.textContent = Math.round(newHumidity) + '%';
+    humidityValue.textContent = Math.round(mockData.sensors.humidity) + '%';
 
-    // Gas Level
+    // Simulate gas level variation
+    mockData.sensors.gasLevel = parseFloat((Math.random() * 25).toFixed(1));
+    
     const gasValue = document.getElementById('gas-value');
-    const gasLevel = Math.random() * 25;
-    gasValue.textContent = gasLevel < 20 ? 'Safe' : 'Warning';
-    gasValue.style.color = gasLevel < 20 ? '#2ecc71' : '#f39c12';
+    gasValue.textContent = mockData.sensors.gasLevel < 20 ? 'Safe' : 'Warning';
+    gasValue.style.color = mockData.sensors.gasLevel < 20 ? '#6bcf7f' : '#ffd93d';
+
+    // Simulate metal detection
+    mockData.sensors.metalDetection = Math.random() > 0.95;
+    
+    const metalValue = document.getElementById('metal-value');
+    metalValue.textContent = mockData.sensors.metalDetection ? 'Detected!' : 'No Detection';
+    metalValue.style.color = mockData.sensors.metalDetection ? '#ff6b6b' : '#6bcf7f';
+}
+
+function simulateBatteryDrain() {
+    // Simulate battery drain
+    mockData.devices.helmet.battery = Math.max(10, mockData.devices.helmet.battery - Math.random() * 2);
+    mockData.devices.footwear.battery = Math.max(10, mockData.devices.footwear.battery - Math.random() * 2);
+    
+    updateMockDeviceStatus();
+    
+    // Alert if battery low
+    if (mockData.devices.helmet.battery < 20) {
+        showNotification('🔋 Helmet battery low! (' + Math.round(mockData.devices.helmet.battery) + '%)', 'warning');
+    }
+    if (mockData.devices.footwear.battery < 20) {
+        showNotification('🔋 Footwear battery low! (' + Math.round(mockData.devices.footwear.battery) + '%)', 'warning');
+    }
+}
+
+function simulateRandomAlerts() {
+    const alertTypes = [
+        { text: '⚠️ METAL DETECTED', location: 'Footwear Module' },
+        { text: '⚡ HIGH TEMPERATURE', location: 'Helmet Module' },
+        { text: '💨 GAS SPIKE DETECTED', location: 'Footwear Module' },
+        { text: '📸 EMERGENCY PHOTO', location: 'ESP32-CAM' }
+    ];
+    
+    if (Math.random() > 0.7) {
+        const alert = alertTypes[Math.floor(Math.random() * alertTypes.length)];
+        addNewAlert(alert.text, alert.location);
+        showNotification('🚨 New Alert: ' + alert.text, 'warning');
+    }
+}
+
+function addNewAlert(alertType, location) {
+    const alertHistory = document.querySelector('.alert-history');
+    if (!alertHistory) return;
+
+    const now = new Date();
+    const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+                    now.getMinutes().toString().padStart(2, '0') + ':' + 
+                    now.getSeconds().toString().padStart(2, '0');
+
+    const alertItem = document.createElement('div');
+    alertItem.className = 'alert-item warning';
+    alertItem.innerHTML = `
+        <span class="alert-time">${timeStr}</span>
+        <span class="alert-type">${alertType}</span>
+        <span class="alert-location">${location}</span>
+    `;
+
+    alertHistory.insertBefore(alertItem, alertHistory.firstChild);
+
+    // Keep only last 10 alerts
+    const alerts = alertHistory.querySelectorAll('.alert-item');
+    if (alerts.length > 10) {
+        alerts[alerts.length - 1].remove();
+    }
 }
 
 // ===== ACTION HANDLERS =====
 function requestPhoto() {
     showNotification('📸 Photo request sent...', 'info');
     setTimeout(() => {
-        showNotification('✅ Photo captured!', 'success');
+        showNotification('✅ Photo captured! Image ID: ' + Math.random().toString(36).substr(2, 9), 'success');
+        addNewAlert('📸 PHOTO CAPTURED', 'ESP32-CAM');
     }, 1500);
 }
 
@@ -930,14 +1187,16 @@ function testBuzzer() {
 function startMonitoring() {
     showNotification('▶️ Monitoring started...', 'info');
     setTimeout(() => {
-        showNotification('✅ All sensors active!', 'success');
+        showNotification('✅ All sensors active and streaming!', 'success');
+        mockData.systemHealth.status = 'ACTIVE';
     }, 1000);
 }
 
 function stopMonitoring() {
     showNotification('⏹️ Monitoring stopped...', 'warning');
     setTimeout(() => {
-        showNotification('✅ Data saved!', 'success');
+        showNotification('✅ Data saved successfully!', 'success');
+        mockData.systemHealth.status = 'IDLE';
     }, 1000);
 }
 
@@ -949,7 +1208,8 @@ function systemTest() {
         testProgress += 25;
         if (testProgress >= 100) {
             clearInterval(testInterval);
-            showNotification('✅ System test completed! All components operational.', 'success');
+            showNotification('✅ System test passed! All components OK.', 'success');
+            addNewAlert('✅ SYSTEM TEST PASSED', 'All Modules');
         }
     }, 500);
 }
@@ -957,7 +1217,7 @@ function systemTest() {
 function downloadReport() {
     showNotification('📥 Generating report...', 'info');
     setTimeout(() => {
-        const report = generateDummyReport();
+        const report = generateReportWithMockData();
         downloadFile(report, 'AEGIS_Report_' + new Date().toISOString().slice(0, 10) + '.txt');
         showNotification('✅ Report downloaded successfully!', 'success');
     }, 1500);
@@ -966,7 +1226,7 @@ function downloadReport() {
 function exportLogs() {
     showNotification('📤 Exporting system logs...', 'info');
     setTimeout(() => {
-        const logs = generateDummyLogs();
+        const logs = generateLogsWithMockData();
         downloadFile(logs, 'AEGIS_Logs_' + new Date().toISOString().slice(0, 10) + '.log');
         showNotification('✅ Logs exported successfully!', 'success');
     }, 1000);
@@ -980,58 +1240,78 @@ function clearAlerts() {
     }
 }
 
-// ===== DATA GENERATORS =====
-function generateDummyReport() {
+// ===== DATA GENERATORS WITH MOCK DATA =====
+function generateReportWithMockData() {
     const date = new Date().toISOString();
     return `
 AEGIS SYSTEM REPORT
 Generated: ${date}
 
 === SYSTEM STATUS ===
-Overall Status: OPERATIONAL
-Helmet Module: ONLINE
-Footwear Module: ONLINE
-Detection Accuracy: 95%
-Response Time: < 3 seconds
+Overall Status: ${mockData.systemHealth.status}
+Helmet Module: ONLINE (Battery: ${Math.round(mockData.devices.helmet.battery)}%)
+Footwear Module: ONLINE (Battery: ${Math.round(mockData.devices.footwear.battery)}%)
+Detection Accuracy: ${mockData.systemHealth.detectionRate}%
+Response Time: ${mockData.systemHealth.responseTime} seconds
+Uptime: ${mockData.systemHealth.uptime}%
 
-=== SENSOR DATA ===
-Temperature: 28.5°C
-Humidity: 65%
-Gas Level: Safe
-Metal Detection: No Active Detection
+=== CURRENT SENSOR DATA ===
+Temperature: ${mockData.sensors.temperature}°C
+Humidity: ${Math.round(mockData.sensors.humidity)}%
+Gas Level: ${mockData.sensors.gasLevel} ppm (${mockData.sensors.gasLevel < 20 ? 'Safe' : 'Warning'})
+Metal Detection: ${mockData.sensors.metalDetection ? 'ACTIVE' : 'No Detection'}
 
-=== ALERTS TODAY ===
-- 14:32:15 - METAL DETECTED (Acknowledged)
-- 13:45:22 - GAS LEVEL ELEVATED (Acknowledged)
-- 13:20:10 - PHOTO CAPTURED (Completed)
+=== DEVICE INFORMATION ===
+Helmet Device ID: ${mockData.devices.helmet.deviceId}
+Helmet Connection: ${mockData.devices.helmet.connection.signal}% ${mockData.devices.helmet.connection.type}
+Helmet Last Update: ${mockData.devices.helmet.lastUpdate}
+
+Footwear Device ID: ${mockData.devices.footwear.deviceId}
+Footwear Connection: ${mockData.devices.footwear.connection.signal}% ${mockData.devices.footwear.connection.type}
+Footwear Last Update: ${mockData.devices.footwear.lastUpdate}
+
+=== RECENT ALERTS ===
+${mockData.alerts.slice(0, 5).map(a => `- ${a.time} - ${a.type} (${a.location})`).join('\n')}
 
 === PERFORMANCE METRICS ===
 Detection Depth: 15cm (Metal)
 Detection Radius: 25-30cm (Gas)
-Battery Life: 8+ hours
-Network Success Rate: 98% (Mesh), 92% (GSM)
+Mesh Network: Connected
+Backup System: Ready
 
-=== NOTES ===
-System operating within normal parameters.
-All sensors calibrated and responsive.
-Recommended maintenance: None at this time.
+=== RECOMMENDATIONS ===
+- Battery levels acceptable
+- All sensors calibrated
+- System operating normally
+- Recommended maintenance: Check connections weekly
 
 Report End
     `;
 }
 
-function generateDummyLogs() {
+function generateLogsWithMockData() {
     const logs = [];
     const now = new Date();
     
-    for (let i = 0; i < 20; i++) {
-        const time = new Date(now.getTime() - i * 5 * 60000);
+    logs.push(`[${now.toISOString()}] System report generated`);
+    logs.push(`[${new Date(now - 60000).toISOString()}] Sensor calibration completed`);
+    logs.push(`[${new Date(now - 120000).toISOString()}] Battery status: Helmet ${Math.round(mockData.devices.helmet.battery)}%, Footwear ${Math.round(mockData.devices.footwear.battery)}%`);
+    logs.push(`[${new Date(now - 180000).toISOString()}] Temperature: ${mockData.sensors.temperature}°C`);
+    logs.push(`[${new Date(now - 240000).toISOString()}] Humidity: ${Math.round(mockData.sensors.humidity)}%`);
+    logs.push(`[${new Date(now - 300000).toISOString()}] Gas level: ${mockData.sensors.gasLevel} ppm`);
+    logs.push(`[${new Date(now - 360000).toISOString()}] Data transmitted to server successfully`);
+    logs.push(`[${new Date(now - 420000).toISOString()}] Network status: Connected`);
+    logs.push(`[${new Date(now - 480000).toISOString()}] All modules operational`);
+    logs.push(`[${new Date(now - 540000).toISOString()}] System health: HEALTHY`);
+    
+    for (let i = 0; i < 10; i++) {
+        const time = new Date(now.getTime() - (600000 + i * 60000));
         const events = [
-            'Sensor data updated',
-            'System check completed',
-            'Data transmitted to server',
-            'Battery status: 75%',
-            'Network status: Connected'
+            `Sensor reading - Temp: ${(20 + Math.random() * 10).toFixed(1)}°C`,
+            'Data sync with server',
+            `Battery check - Levels OK`,
+            'Signal strength: Strong',
+            'Network: Stable'
         ];
         logs.push(`[${time.toISOString()}] ${events[Math.floor(Math.random() * events.length)]}`);
     }
@@ -1105,6 +1385,55 @@ function addAnimationStyles() {
     document.head.appendChild(style);
 }
 
+// ===== STREAMING INDICATOR =====
+function addStreamingIndicator() {
+    const indicator = document.createElement('div');
+    indicator.className = 'streaming-indicator';
+    indicator.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 999;
+    `;
+    
+    const dot = document.createElement('div');
+    dot.style.cssText = `
+        width: 8px;
+        height: 8px;
+        background: #00d4ff;
+        border-radius: 50%;
+        animation: streamPulse 1.5s infinite;
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+    `;
+    
+    const text = document.createElement('span');
+    text.textContent = 'Live';
+    text.style.cssText = `
+        font-size: 12px;
+        font-weight: 600;
+        color: #00d4ff;
+        text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+        letter-spacing: 1px;
+    `;
+    
+    indicator.appendChild(dot);
+    indicator.appendChild(text);
+    document.body.appendChild(indicator);
+    
+    // Add animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes streamPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.8); }
+            50% { box-shadow: 0 0 20px rgba(0, 212, 255, 1); }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 // ===== KEYBOARD SHORTCUTS =====
 document.addEventListener('keydown', function(event) {
     // Ctrl+P to request photo
@@ -1122,14 +1451,15 @@ document.addEventListener('keydown', function(event) {
         event.preventDefault();
         systemTest();
     }
-    // Ctrl+L to export logs
+    // Ctrl+L to export logsopti
     if (event.ctrlKey && event.key === 'l') {
         event.preventDefault();
         exportLogs();
     }
 });
 
-console.log('AEGIS Dashboard with Advanced Features initialized!');
+console.log('AEGIS Dashboard with Mock Data Simulation initialized!');
+console.log('Mock Data:', mockData);
     </script>
 </body>
 </html>
