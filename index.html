@@ -885,42 +885,69 @@ body::before {
     <script>
 // AEGIS Dashboard - JavaScript with Advanced Features & Mock Data Simulation
 
-// ===== MOCK DATA =====
+// ===== ADVANCED MOCK DATA WITH REAL-TIME STREAMING =====
 const mockData = {
     devices: {
         helmet: {
             deviceId: 'ESP32-CAM-001',
-            connection: { signal: 92, type: 'Wi-Fi' },
+            connection: { signal: 92, type: 'Wi-Fi', strength: 'Strong' },
             battery: 75,
             status: 'Operational',
-            lastUpdate: new Date()
+            lastUpdate: new Date(),
+            temperature: 42.3,
+            accelerometer: { x: 0.2, y: 0.1, z: 9.8 },
+            frameRate: 30,
+            imageQuality: 85
         },
         footwear: {
             deviceId: 'ESP8266-FOOT-002',
-            connection: { signal: 88, type: 'Wi-Fi' },
+            connection: { signal: 88, type: 'Wi-Fi', strength: 'Good' },
             battery: 68,
             status: 'Operational',
-            lastUpdate: new Date()
+            lastUpdate: new Date(),
+            temperature: 38.7,
+            pressure: 1013.25,
+            calibration: 98
         }
     },
     sensors: {
         temperature: 28.5,
         humidity: 65,
         gasLevel: 12,
-        metalDetection: false
+        metalDetection: false,
+        pressureAltitude: 523,
+        dustParticles: 45,
+        co2Level: 420,
+        toxicGasLevel: 0
     },
     systemHealth: {
         status: 'HEALTHY',
         detectionRate: 95,
         responseTime: 2.8,
-        uptime: 100
+        uptime: 99.98,
+        processorLoad: 32,
+        memoryUsage: 45,
+        networkLatency: 12,
+        dataPacketsPerSecond: 156
+    },
+    historicalData: {
+        temperatureHistory: [22, 24, 26, 28.5, 27, 25, 28, 29],
+        humidityHistory: [55, 60, 65, 65, 62, 58, 60, 64],
+        gasHistory: [10, 15, 8, 12, 18, 11, 14, 16],
+        detectionEvents: 23
     },
     alerts: [
-        { time: '14:32:15', type: 'METAL DETECTED', location: 'Footwear Module', class: 'info', icon: '⚠️' },
-        { time: '13:45:22', type: 'GAS LEVEL ELEVATED', location: 'Helmet Module', class: 'warning', icon: '⚡' },
-        { time: '13:20:10', type: 'PHOTO CAPTURED', location: 'ESP32-CAM', class: 'info', icon: '📸' },
-        { time: '12:00:00', type: 'SYSTEM INITIALIZED', location: 'All Modules', class: 'success', icon: '✅' }
-    ]
+        { time: '14:32:15', type: 'METAL DETECTED', location: 'Footwear Module', class: 'info', icon: '⚠️', severity: 'medium' },
+        { time: '13:45:22', type: 'GAS LEVEL ELEVATED', location: 'Helmet Module', class: 'warning', icon: '⚡', severity: 'high' },
+        { time: '13:20:10', type: 'PHOTO CAPTURED', location: 'ESP32-CAM', class: 'info', icon: '📸', severity: 'low' },
+        { time: '12:00:00', type: 'SYSTEM INITIALIZED', location: 'All Modules', class: 'success', icon: '✅', severity: 'info' }
+    ],
+    performanceMetrics: {
+        sensorAccuracy: 99.2,
+        dataTransmissionRate: 98.5,
+        systemReliability: 99.98,
+        averageResponseTime: 2.3
+    }
 };
 
 // Initialize on page load
@@ -1066,8 +1093,10 @@ function initializeCharts() {
 function startRealTimeUpdates() {
     // Update sensor data more frequently for real-time feel
     setInterval(updateSensorData, 2500);
+    setInterval(updateDeviceMetrics, 3000);
     setInterval(simulateBatteryDrain, 30000);
     setInterval(simulateRandomAlerts, 45000);
+    setInterval(updatePerformanceMetrics, 4000);
     addStreamingIndicator();
 }
 
@@ -1075,18 +1104,28 @@ function updateSensorData() {
     // Simulate temperature variation
     mockData.sensors.temperature = parseFloat((mockData.sensors.temperature + (Math.random() - 0.5) * 2).toFixed(1));
     mockData.sensors.temperature = Math.max(20, Math.min(35, mockData.sensors.temperature));
+    mockData.historicalData.temperatureHistory.push(mockData.sensors.temperature);
+    if (mockData.historicalData.temperatureHistory.length > 10) mockData.historicalData.temperatureHistory.shift();
     
     const tempValue = document.getElementById('temp-value');
     tempValue.textContent = mockData.sensors.temperature + '°C';
+    tempValue.style.animation = 'none';
+    setTimeout(() => tempValue.style.animation = 'dataFlip 0.6s ease', 10);
 
     // Simulate humidity variation
     mockData.sensors.humidity = Math.max(30, Math.min(90, mockData.sensors.humidity + Math.random() * 4 - 2));
+    mockData.historicalData.humidityHistory.push(mockData.sensors.humidity);
+    if (mockData.historicalData.humidityHistory.length > 10) mockData.historicalData.humidityHistory.shift();
     
     const humidityValue = document.getElementById('humidity-value');
     humidityValue.textContent = Math.round(mockData.sensors.humidity) + '%';
+    humidityValue.style.animation = 'none';
+    setTimeout(() => humidityValue.style.animation = 'dataFlip 0.6s ease', 10);
 
     // Simulate gas level variation
     mockData.sensors.gasLevel = parseFloat((Math.random() * 25).toFixed(1));
+    mockData.historicalData.gasHistory.push(mockData.sensors.gasLevel);
+    if (mockData.historicalData.gasHistory.length > 10) mockData.historicalData.gasHistory.shift();
     
     const gasValue = document.getElementById('gas-value');
     gasValue.textContent = mockData.sensors.gasLevel < 20 ? 'Safe' : 'Warning';
@@ -1098,6 +1137,11 @@ function updateSensorData() {
     const metalValue = document.getElementById('metal-value');
     metalValue.textContent = mockData.sensors.metalDetection ? 'Detected!' : 'No Detection';
     metalValue.style.color = mockData.sensors.metalDetection ? '#ff6b6b' : '#6bcf7f';
+
+    // Update CO2 and other gases
+    mockData.sensors.co2Level = parseFloat((420 + Math.random() * 50 - 25).toFixed(1));
+    mockData.sensors.dustParticles = Math.round(45 + Math.random() * 30 - 15);
+    mockData.sensors.pressureAltitude = parseFloat((523 + Math.random() * 10 - 5).toFixed(2));
 }
 
 function simulateBatteryDrain() {
@@ -1157,12 +1201,89 @@ function addNewAlert(alertType, location) {
     }
 }
 
+// ===== UPDATE DEVICE METRICS =====
+function updateDeviceMetrics() {
+    // Update helmet device metrics
+    mockData.devices.helmet.temperature = parseFloat((42 + Math.random() * 5 - 2.5).toFixed(1));
+    mockData.devices.helmet.connection.signal = Math.max(60, Math.min(100, mockData.devices.helmet.connection.signal + Math.random() * 10 - 5));
+    mockData.devices.helmet.frameRate = Math.round(28 + Math.random() * 4);
+    mockData.devices.helmet.imageQuality = Math.max(70, Math.min(100, mockData.devices.helmet.imageQuality + Math.random() * 8 - 4));
+
+    // Update footwear device metrics
+    mockData.devices.footwear.temperature = parseFloat((38 + Math.random() * 4 - 2).toFixed(1));
+    mockData.devices.footwear.connection.signal = Math.max(60, Math.min(100, mockData.devices.footwear.connection.signal + Math.random() * 10 - 5));
+    mockData.devices.footwear.pressure = parseFloat((1013 + Math.random() * 5 - 2.5).toFixed(2));
+    mockData.devices.footwear.calibration = Math.max(95, Math.min(100, mockData.devices.footwear.calibration + Math.random() * 2 - 1));
+
+    updateMockDeviceStatus();
+}
+
+// ===== UPDATE PERFORMANCE METRICS =====
+function updatePerformanceMetrics() {
+    mockData.systemHealth.processorLoad = Math.max(15, Math.min(80, mockData.systemHealth.processorLoad + Math.random() * 20 - 10));
+    mockData.systemHealth.memoryUsage = Math.max(30, Math.min(75, mockData.systemHealth.memoryUsage + Math.random() * 15 - 7));
+    mockData.systemHealth.networkLatency = Math.max(5, Math.min(50, mockData.systemHealth.networkLatency + Math.random() * 10 - 5));
+    mockData.systemHealth.dataPacketsPerSecond = Math.round(120 + Math.random() * 80);
+    mockData.systemHealth.detectionRate = Math.max(90, Math.min(99.9, mockData.systemHealth.detectionRate + (Math.random() - 0.5) * 0.5));
+    
+    // Update performance display
+    updatePerformanceDisplay();
+}
+
+// ===== UPDATE PERFORMANCE DISPLAY =====
+function updatePerformanceDisplay() {
+    // Add performance stats overlay if not exists
+    let perfPanel = document.querySelector('.performance-panel');
+    if (!perfPanel) {
+        perfPanel = document.createElement('div');
+        perfPanel.className = 'performance-panel';
+        perfPanel.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(10, 46, 92, 0.9);
+            border: 1px solid #00d4ff;
+            border-radius: 8px;
+            padding: 15px;
+            width: 280px;
+            font-size: 12px;
+            color: #a8c5e8;
+            z-index: 998;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(10px);
+            max-height: 300px;
+            overflow-y: auto;
+        `;
+        document.body.appendChild(perfPanel);
+    }
+    
+    perfPanel.innerHTML = `
+        <div style="color: #00d4ff; font-weight: 600; margin-bottom: 8px;">📊 SYSTEM METRICS</div>
+        <div style="display: grid; gap: 6px; font-size: 11px;">
+            <div>CPU Load: <span style="color: #ffd93d;">${Math.round(mockData.systemHealth.processorLoad)}%</span></div>
+            <div>Memory: <span style="color: #ffd93d;">${Math.round(mockData.systemHealth.memoryUsage)}%</span></div>
+            <div>Latency: <span style="color: #6bcf7f;">${mockData.systemHealth.networkLatency}ms</span></div>
+            <div>Data/sec: <span style="color: #6bcf7f;">${mockData.systemHealth.dataPacketsPerSecond}</span></div>
+            <div>Detection: <span style="color: #00d4ff;">${mockData.systemHealth.detectionRate.toFixed(2)}%</span></div>
+            <div>Uptime: <span style="color: #6bcf7f;">${mockData.systemHealth.uptime.toFixed(2)}%</span></div>
+            <div style="border-top: 1px solid rgba(0, 212, 255, 0.3); margin-top: 8px; padding-top: 8px;">
+                <div>Helmet: <span style="color: #ff6b6b;">${mockData.devices.helmet.temperature}°C</span></div>
+                <div>Footwear: <span style="color: #ff6b6b;">${mockData.devices.footwear.temperature}°C</span></div>
+            </div>
+        </div>
+    `;
+}
+
 // ===== ACTION HANDLERS =====
 function requestPhoto() {
+    const quality = mockData.devices.helmet.imageQuality;
+    const resolution = quality > 85 ? '4K' : quality > 75 ? 'Full HD' : '1080p';
+    
     showNotification('📸 Photo request sent...', 'info');
     setTimeout(() => {
-        showNotification('✅ Photo captured! Image ID: ' + Math.random().toString(36).substr(2, 9), 'success');
-        addNewAlert('📸 PHOTO CAPTURED', 'ESP32-CAM');
+        showNotification(`✅ Photo captured! (${resolution} | ${quality}% Quality)`, 'success');
+        addNewAlert('📸 PHOTO CAPTURED (' + resolution + ')', 'ESP32-CAM');
+        mockData.historicalData.detectionEvents++;
     }, 1500);
 }
 
@@ -1203,15 +1324,25 @@ function stopMonitoring() {
 // ===== ADVANCED FEATURES =====
 function systemTest() {
     showNotification('⚙️ Running comprehensive system test...', 'info');
-    let testProgress = 0;
-    const testInterval = setInterval(() => {
-        testProgress += 25;
-        if (testProgress >= 100) {
-            clearInterval(testInterval);
-            showNotification('✅ System test passed! All components OK.', 'success');
-            addNewAlert('✅ SYSTEM TEST PASSED', 'All Modules');
-        }
-    }, 500);
+    const tests = [
+        { name: 'Hardware Check', duration: 800 },
+        { name: 'Sensor Calibration', duration: 1000 },
+        { name: 'Network Connectivity', duration: 600 },
+        { name: 'Data Integrity', duration: 800 },
+        { name: 'Safety Systems', duration: 700 }
+    ];
+    
+    let completed = 0;
+    tests.forEach((test, index) => {
+        setTimeout(() => {
+            showNotification(`✅ ${test.name} passed`, 'success');
+            completed++;
+            if (completed === tests.length) {
+                showNotification('🎯 All tests passed! System healthy.', 'success');
+                addNewAlert('✅ SYSTEM TEST PASSED', 'All Modules');
+            }
+        }, 800 + index * 1500);
+    });
 }
 
 function downloadReport() {
@@ -1244,48 +1375,84 @@ function clearAlerts() {
 function generateReportWithMockData() {
     const date = new Date().toISOString();
     return `
-AEGIS SYSTEM REPORT
+================================================================================
+                        AEGIS SYSTEM COMPREHENSIVE REPORT
+================================================================================
 Generated: ${date}
+Report ID: RPT-${Math.random().toString(36).substr(2, 8).toUpperCase()}
 
-=== SYSTEM STATUS ===
+================================================================================
+SYSTEM STATUS
+================================================================================
 Overall Status: ${mockData.systemHealth.status}
-Helmet Module: ONLINE (Battery: ${Math.round(mockData.devices.helmet.battery)}%)
-Footwear Module: ONLINE (Battery: ${Math.round(mockData.devices.footwear.battery)}%)
-Detection Accuracy: ${mockData.systemHealth.detectionRate}%
-Response Time: ${mockData.systemHealth.responseTime} seconds
-Uptime: ${mockData.systemHealth.uptime}%
+System Uptime: ${mockData.systemHealth.uptime.toFixed(2)}%
+Detection Accuracy: ${mockData.systemHealth.detectionRate.toFixed(2)}%
+Response Time: ${mockData.systemHealth.responseTime}s
 
-=== CURRENT SENSOR DATA ===
+================================================================================
+DEVICE INFORMATION
+================================================================================
+
+HELMET MODULE (ESP32-CAM-001)
+  Device ID: ${mockData.devices.helmet.deviceId}
+  Battery: ${Math.round(mockData.devices.helmet.battery)}%
+  Connection: ${mockData.devices.helmet.connection.signal}% ${mockData.devices.helmet.connection.strength}
+  Temperature: ${mockData.devices.helmet.temperature}°C
+  Frame Rate: ${mockData.devices.helmet.frameRate} FPS
+  Image Quality: ${mockData.devices.helmet.imageQuality}%
+  Status: ${mockData.devices.helmet.status}
+
+FOOTWEAR MODULE (ESP8266-FOOT-002)
+  Device ID: ${mockData.devices.footwear.deviceId}
+  Battery: ${Math.round(mockData.devices.footwear.battery)}%
+  Connection: ${mockData.devices.footwear.connection.signal}% ${mockData.devices.footwear.connection.strength}
+  Temperature: ${mockData.devices.footwear.temperature}°C
+  Pressure: ${mockData.devices.footwear.pressure} hPa
+  Calibration: ${mockData.devices.footwear.calibration}%
+  Status: ${mockData.devices.footwear.status}
+
+================================================================================
+CURRENT SENSOR READINGS
+================================================================================
 Temperature: ${mockData.sensors.temperature}°C
 Humidity: ${Math.round(mockData.sensors.humidity)}%
-Gas Level: ${mockData.sensors.gasLevel} ppm (${mockData.sensors.gasLevel < 20 ? 'Safe' : 'Warning'})
-Metal Detection: ${mockData.sensors.metalDetection ? 'ACTIVE' : 'No Detection'}
+Gas Level: ${mockData.sensors.gasLevel} ppm (${mockData.sensors.gasLevel < 20 ? 'SAFE' : 'ELEVATED'})
+Metal Detection: ${mockData.sensors.metalDetection ? 'ACTIVE' : 'INACTIVE'}
+CO2 Level: ${mockData.sensors.co2Level} ppm
+Dust Particles: ${mockData.sensors.dustParticles} µg/m³
+Pressure/Altitude: ${mockData.sensors.pressureAltitude} m
 
-=== DEVICE INFORMATION ===
-Helmet Device ID: ${mockData.devices.helmet.deviceId}
-Helmet Connection: ${mockData.devices.helmet.connection.signal}% ${mockData.devices.helmet.connection.type}
-Helmet Last Update: ${mockData.devices.helmet.lastUpdate}
+================================================================================
+SYSTEM PERFORMANCE METRICS
+================================================================================
+CPU Load: ${Math.round(mockData.systemHealth.processorLoad)}%
+Memory Usage: ${Math.round(mockData.systemHealth.memoryUsage)}%
+Network Latency: ${mockData.systemHealth.networkLatency}ms
+Data Packets/Second: ${mockData.systemHealth.dataPacketsPerSecond}
+Sensor Accuracy: ${mockData.performanceMetrics.sensorAccuracy}%
+Data Transmission Rate: ${mockData.performanceMetrics.dataTransmissionRate}%
+System Reliability: ${mockData.performanceMetrics.systemReliability}%
 
-Footwear Device ID: ${mockData.devices.footwear.deviceId}
-Footwear Connection: ${mockData.devices.footwear.connection.signal}% ${mockData.devices.footwear.connection.type}
-Footwear Last Update: ${mockData.devices.footwear.lastUpdate}
+================================================================================
+ALERT SUMMARY
+================================================================================
+Total Detection Events: ${mockData.historicalData.detectionEvents}
+Recent Alerts: ${mockData.alerts.length}
 
-=== RECENT ALERTS ===
-${mockData.alerts.slice(0, 5).map(a => `- ${a.time} - ${a.type} (${a.location})`).join('\n')}
+${mockData.alerts.slice(0, 5).map(a => `  [${a.time}] ${a.type} @ ${a.location}`).join('\n')}
 
-=== PERFORMANCE METRICS ===
-Detection Depth: 15cm (Metal)
-Detection Radius: 25-30cm (Gas)
-Mesh Network: Connected
-Backup System: Ready
+================================================================================
+RECOMMENDATIONS
+================================================================================
+✓ Battery levels acceptable
+✓ All sensors functioning normally  
+✓ Network connectivity stable
+✓ System performance optimal
+✓ No maintenance required at this time
 
-=== RECOMMENDATIONS ===
-- Battery levels acceptable
-- All sensors calibrated
-- System operating normally
-- Recommended maintenance: Check connections weekly
-
-Report End
+================================================================================
+End of Report
+================================================================================
     `;
 }
 
@@ -1293,28 +1460,28 @@ function generateLogsWithMockData() {
     const logs = [];
     const now = new Date();
     
-    logs.push(`[${now.toISOString()}] System report generated`);
-    logs.push(`[${new Date(now - 60000).toISOString()}] Sensor calibration completed`);
-    logs.push(`[${new Date(now - 120000).toISOString()}] Battery status: Helmet ${Math.round(mockData.devices.helmet.battery)}%, Footwear ${Math.round(mockData.devices.footwear.battery)}%`);
-    logs.push(`[${new Date(now - 180000).toISOString()}] Temperature: ${mockData.sensors.temperature}°C`);
-    logs.push(`[${new Date(now - 240000).toISOString()}] Humidity: ${Math.round(mockData.sensors.humidity)}%`);
-    logs.push(`[${new Date(now - 300000).toISOString()}] Gas level: ${mockData.sensors.gasLevel} ppm`);
-    logs.push(`[${new Date(now - 360000).toISOString()}] Data transmitted to server successfully`);
-    logs.push(`[${new Date(now - 420000).toISOString()}] Network status: Connected`);
-    logs.push(`[${new Date(now - 480000).toISOString()}] All modules operational`);
-    logs.push(`[${new Date(now - 540000).toISOString()}] System health: HEALTHY`);
-    
-    for (let i = 0; i < 10; i++) {
-        const time = new Date(now.getTime() - (600000 + i * 60000));
-        const events = [
-            `Sensor reading - Temp: ${(20 + Math.random() * 10).toFixed(1)}°C`,
-            'Data sync with server',
-            `Battery check - Levels OK`,
-            'Signal strength: Strong',
-            'Network: Stable'
-        ];
-        logs.push(`[${time.toISOString()}] ${events[Math.floor(Math.random() * events.length)]}`);
-    }
+    // Generate realistic log entries
+    logs.push(`[${now.toISOString()}] === AEGIS SYSTEM LOG ===`);
+    logs.push(`[${new Date(now - 1000).toISOString()}] System report generated`);
+    logs.push(`[${new Date(now - 5000).toISOString()}] Performance metrics updated`);
+    logs.push(`[${new Date(now - 10000).toISOString()}] Device metrics sync completed`);
+    logs.push(`[${new Date(now - 15000).toISOString()}] Sensor calibration check: OK`);
+    logs.push(`[${new Date(now - 20000).toISOString()}] Helmet battery: ${Math.round(mockData.devices.helmet.battery)}%`);
+    logs.push(`[${new Date(now - 25000).toISOString()}] Footwear battery: ${Math.round(mockData.devices.footwear.battery)}%`);
+    logs.push(`[${new Date(now - 30000).toISOString()}] Temperature: ${mockData.sensors.temperature}°C`);
+    logs.push(`[${new Date(now - 35000).toISOString()}] Humidity: ${Math.round(mockData.sensors.humidity)}%`);
+    logs.push(`[${new Date(now - 40000).toISOString()}] Gas level: ${mockData.sensors.gasLevel} ppm`);
+    logs.push(`[${new Date(now - 45000).toISOString()}] CPU Load: ${Math.round(mockData.systemHealth.processorLoad)}%`);
+    logs.push(`[${new Date(now - 50000).toISOString()}] Memory Usage: ${Math.round(mockData.systemHealth.memoryUsage)}%`);
+    logs.push(`[${new Date(now - 55000).toISOString()}] Network Latency: ${mockData.systemHealth.networkLatency}ms`);
+    logs.push(`[${new Date(now - 60000).toISOString()}] Data packets transmitted: ${mockData.systemHealth.dataPacketsPerSecond}/sec`);
+    logs.push(`[${new Date(now - 65000).toISOString()}] Detection accuracy: ${mockData.systemHealth.detectionRate.toFixed(2)}%`);
+    logs.push(`[${new Date(now - 70000).toISOString()}] Helmet module: ONLINE (Signal: ${Math.round(mockData.devices.helmet.connection.signal)}%)`);
+    logs.push(`[${new Date(now - 75000).toISOString()}] Footwear module: ONLINE (Signal: ${Math.round(mockData.devices.footwear.connection.signal)}%)`);
+    logs.push(`[${new Date(now - 80000).toISOString()}] Detection events: ${mockData.historicalData.detectionEvents}`);
+    logs.push(`[${new Date(now - 85000).toISOString()}] System health: ${mockData.systemHealth.status}`);
+    logs.push(`[${new Date(now - 90000).toISOString()}] All systems operational`);
+    logs.push(`[${new Date(now - 95000).toISOString()}] === END OF LOG ===`);
     
     return logs.join('\n');
 }
