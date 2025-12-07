@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <h1>⚔️ AEGIS</h1>
+                <p>Wearable Safety System Dashboard</p>
+            </div>
+            <nav class="navbar-links">
+                <a href="#status">Status</a>
+                <a href="#sensors">Sensors</a>
+                <a href="#alerts">Alerts</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <main class="dashboard">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h2>Real-Time Monitoring Dashboard</h2>
+                <p>AEGIS System Status & Control</p>
+            </div>
+        </section>
+
+        <!-- System Status Section -->
+        <section id="status" class="section">
+            <div class="container">
+                <h2>System Status Dashboard</h2>
+                <div class="status-grid">
+                    <!-- Helmet Module Status -->
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>🎖️ Helmet Module</h3>
+                            <span class="status-badge online">ONLINE</span>
+                        </div>
+                        <div class="status-content">
+                            <div class="status-item">
+                                <label>Device ID:</label>
+                                <span>ESP32-CAM-001</span>
+                            </div>
+                            <div class="status-item">
+                                <label>Connection:</label>
+                                <span>📶 Wi-Fi (92%)</span>
+                            </div>
+                            <div class="status-item">
+                                <label>Battery:</label>
+                                <div class="battery-bar">
+                                    <div class="battery-level" style="width: 75%;">75%</div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <label>Status:</label>
+                                <span>Operational</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footwear Module Status -->
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>👞 Footwear Module</h3>
+                            <span class="status-badge online">ONLINE</span>
+                        </div>
+                        <div class="status-content">
+                            <div class="status-item">
+                                <label>Device ID:</label>
+                                <span>ESP8266-FOOT-002</span>
+                            </div>
+                            <div class="status-item">
+                                <label>Connection:</label>
+                                <span>📶 Wi-Fi (88%)</span>
+                            </div>
+                            <div class="status-item">
+                                <label>Battery:</label>
+                                <div class="battery-bar">
+                                    <div class="battery-level" style="width: 68%;">68%</div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <label>Status:</label>
+                                <span>Operational</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Health -->
+                    <div class="status-card">
+                        <div class="status-header">
+                            <h3>💚 System Health</h3>
+                            <span class="status-badge excellent">HEALTHY</span>
+                        </div>
+                        <div class="status-content">
+                            <div class="status-item">
+                                <label>Overall Status:</label>
+                                <span>All Systems Operational</span>
+                            </div>
+                            <div class="status-item">
+                                <label>Detection Rate:</label>
+                                <span>95%</span>
+                            </div>
+                            <div class="status-item">
+                                <label>Response Time:</label>
+                                <span>&lt; 3 seconds</span>
+                            </div>
+                            <div class="status-item">
+                                <label>Uptime:</label>
+                                <span>100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sensor Data Section -->
+        <section id="sensors" class="section">
+            <div class="container">
+                <h2>Real-Time Sensor Data</h2>
+                <div class="sensors-grid">
+                    <div class="sensor-card">
+                        <h4>🌡️ Temperature</h4>
+                        <div class="sensor-value" id="temp-value">28.5°C</div>
+                        <canvas id="tempChart"></canvas>
+                    </div>
+                    <div class="sensor-card">
+                        <h4>💧 Humidity</h4>
+                        <div class="sensor-value" id="humidity-value">65%</div>
+                        <canvas id="humidityChart"></canvas>
+                    </div>
+                    <div class="sensor-card">
+                        <h4>💨 Gas Level</h4>
+                        <div class="sensor-value" id="gas-value">Safe</div>
+                        <canvas id="gasChart"></canvas>
+                    </div>
+                    <div class="sensor-card">
+                        <h4>🔗 Metal Detection</h4>
+                        <div class="sensor-value" id="metal-value">No Detection</div>
+                        <canvas id="metalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alert History Section -->
+        <section id="alerts" class="section">
+            <div class="container">
+                <h2>Alert History</h2>
+                <div class="alert-history">
+                    <div class="alert-item info">
+                        <span class="alert-time">14:32:15</span>
+                        <span class="alert-type">⚠️ METAL DETECTED</span>
+                        <span class="alert-location">Footwear Module</span>
+                    </div>
+                    <div class="alert-item warning">
+                        <span class="alert-time">13:45:22</span>
+                        <span class="alert-type">⚡ GAS LEVEL ELEVATED</span>
+                        <span class="alert-location">Helmet Module</span>
+                    </div>
+                    <div class="alert-item info">
+                        <span class="alert-time">13:20:10</span>
+                        <span class="alert-type">📸 PHOTO CAPTURED</span>
+                        <span class="alert-location">ESP32-CAM</span>
+                    </div>
+                    <div class="alert-item success">
+                        <span class="alert-time">12:00:00</span>
+                        <span class="alert-type">✅ SYSTEM INITIALIZED</span>
+                        <span class="alert-location">All Modules</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Controls Section -->
+        <section class="section quick-controls">
+            <div class="container">
+                <h2>Quick Controls</h2>
+                <div class="controls-grid">
+                    <button class="control-btn" onclick="requestPhoto()">
+                        <span class="control-icon">📸</span>
+                        <span>Request Photo</span>
+                    </button>
+                    <button class="control-btn" onclick="testBuzzer()">
+                        <span class="control-icon">🔔</span>
+                        <span>Test Buzzer</span>
+                    </button>
+                    <button class="control-btn" onclick="startMonitoring()">
+                        <span class="control-icon">▶️</span>
+                        <span>Start Monitoring</span>
+                    </button>
+                    <button class="control-btn" onclick="stopMonitoring()">
+                        <span class="control-icon">⏹️</span>
+                        <span>Stop Monitoring</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Features Section -->
+        <section class="section advanced-features">
+            <div class="container">
+                <h2>Advanced Features</h2>
+                <div class="controls-grid">
+                    <button class="control-btn advanced-btn" onclick="systemTest()">
+                        <span class="control-icon">⚙️</span>
+                        <span>System Test</span>
+                    </button>
+                    <button class="control-btn advanced-btn" onclick="downloadReport()">
+                        <span class="control-icon">📥</span>
+                        <span>Download Report</span>
+                    </button>
+                    <button class="control-btn advanced-btn" onclick="exportLogs()">
+                        <span class="control-icon">📤</span>
+                        <span>Export Logs</span>
+                    </button>
+                    <button class="control-btn advanced-btn" onclick="clearAlerts()">
+                        <span class="control-icon">🗑️</span>
+                        <span>Clear Alerts</span>
+                    </button>
+                </div>
+                <div class="advanced-info">
+                    <p><strong>Keyboard Shortcuts:</strong> Ctrl+P (Photo) | Ctrl+T (Buzzer) | Ctrl+S (System Test) | Ctrl+L (Export Logs)</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 AEGIS Dashboard | Chandigarh Engineering College</p>
+            <p>Advanced Explosive-detection & Gas-sensing Integrated Safetywear</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
